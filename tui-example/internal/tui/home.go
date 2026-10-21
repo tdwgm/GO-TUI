@@ -14,8 +14,14 @@ import (
 
 // homeButtons is the Home menu (Help last).
 var homeButtons = []button{
-	{"Delete", "delete", "x"}, {"Config", "config", "o"}, {"Log", "log", "l"},
-	{"Quit", "back", "q"}, {"Help", "help", "h"},
+	{"Sample", "sample-item", "s"},
+	{"Delete", "delete", "x"},
+	{"Doctor", "doctor", "d"},
+	{"Reload", "reload", "r"},
+	{"Config", "config", "o"},
+	{"Log", "log", "l"},
+	{"Quit", "back", "q"},
+	{"Help", "help", "h"},
 }
 
 type homeState struct {
@@ -199,18 +205,25 @@ func (h homeState) selected() (string, bool) {
 
 // homeAction runs the Home-specific menu actions.
 func (m model) homeAction(action string) (tea.Model, tea.Cmd) {
-	if action != "delete" {
+	switch action {
+	case "sample-item":
+		item := fmt.Sprintf("Demo Item #%d", len(m.home.items)+1)
+		m.home.items = append(m.home.items, item)
+		_ = saveItems(m.home.items)
+		m.statusMsg = "Added " + item
 		return m, nil
+	case "delete":
+		it, ok := m.home.selected()
+		if !ok {
+			m.statusMsg = "Select an item first (↓ into the list)"
+			return m, nil
+		}
+		if m.cfg.ConfirmDelete {
+			return m.askConfirm("delete", fmt.Sprintf("Delete %q?", it)), nil
+		}
+		return m.deleteSelected()
 	}
-	it, ok := m.home.selected()
-	if !ok {
-		m.statusMsg = "Select an item first (↓ into the list)"
-		return m, nil
-	}
-	if m.cfg.ConfirmDelete {
-		return m.askConfirm("delete", fmt.Sprintf("Delete %q?", it)), nil
-	}
-	return m.deleteSelected()
+	return m, nil
 }
 
 func (m model) deleteSelected() (tea.Model, tea.Cmd) {

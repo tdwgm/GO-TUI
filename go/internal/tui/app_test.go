@@ -100,11 +100,11 @@ func TestTextIndentedOneRule(t *testing.T) {
 func TestMenuLineAndNavigation(t *testing.T) {
 	m := testModel(t)
 	v := plain(m.View())
-	if !strings.Contains(v, "Delete x · Config o · Log l · Quit q · Help h") || strings.Contains(v, "▶ Delete") {
+	if !strings.Contains(v, "Sample s · Delete x · Doctor d · Reload r · Config o · Log l · Quit q · Help h") || strings.Contains(v, "▶ Sample") {
 		t.Fatalf("menu line wrong or selected too early:\n%s", v)
 	}
 	m, _ = press(t, m, "tab")
-	if !m.menuActive || !strings.Contains(plain(m.View()), "▶ Delete") {
+	if !m.menuActive || !strings.Contains(plain(m.View()), "▶ Sample") {
 		t.Fatal("tab should select the first menu entry")
 	}
 	m, _ = press(t, m, "right", "right")

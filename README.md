@@ -9,6 +9,10 @@
 [![Lipgloss](https://img.shields.io/badge/Styling-Lipgloss-pink)](https://github.com/charmbracelet/lipgloss)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
+<p align="center">
+  <img src="assets/demo.gif" alt="GO-TUI Interactive Demo" width="800">
+</p>
+
 GO-TUI provides a production-grade, architectural foundation for terminal tools. It ships with a complete, fully functional demo application (`tui-example`), a reproducible starter template, and a strict terminal design grammar.
 
 ---

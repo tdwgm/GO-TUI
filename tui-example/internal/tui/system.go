@@ -18,11 +18,16 @@ import (
 // aliasesSupported: shell aliases exist on Linux/macOS (zsh, bash).
 func aliasesSupported() bool { return runtime.GOOS != "windows" }
 
+func binName() string {
+	return strings.ToLower(firstNonEmpty(BinaryName, AppName))
+}
+
 var rcFiles = []string{".zshrc", ".bashrc"}
 
-// aliasWhere returns where `alias <AppName>=` is defined ("~/.zshrc:12").
+// aliasWhere returns where `alias <bin>=` is defined ("~/.zshrc:12").
 func aliasWhere() []string {
 	home, _ := os.UserHomeDir()
+	name := binName()
 	var where []string
 	for _, rc := range rcFiles {
 		data, err := os.ReadFile(filepath.Join(home, rc))
@@ -30,7 +35,7 @@ func aliasWhere() []string {
 			continue
 		}
 		for i, line := range strings.Split(string(data), "\n") {
-			if strings.HasPrefix(line, "alias "+AppName+"=") {
+			if strings.HasPrefix(line, "alias "+name+"=") {
 				where = append(where, fmt.Sprintf("~/%s:%d", rc, i+1))
 			}
 		}
@@ -38,10 +43,10 @@ func aliasWhere() []string {
 	return where
 }
 
-// installedBinary is ~/.local/bin/<AppName>.
+// installedBinary is ~/.local/bin/<bin>.
 func installedBinary() string {
 	home, _ := os.UserHomeDir()
-	return filepath.Join(home, ".local", "bin", AppName)
+	return filepath.Join(home, ".local", "bin", binName())
 }
 
 // syncAliases applies SHELL_ALIASES: add the alias where it is missing, or
@@ -52,9 +57,10 @@ func syncAliases(cfg *Config) string {
 	}
 	have := len(aliasWhere()) > 0
 	home, _ := os.UserHomeDir()
+	name := binName()
 	switch {
 	case cfg.ShellAliases && !have:
-		line := fmt.Sprintf("\nalias %s='%s'\n", AppName, installedBinary())
+		line := fmt.Sprintf("\nalias %s='%s'\n", name, installedBinary())
 		for _, rc := range rcFiles {
 			p := filepath.Join(home, rc)
 			if f, err := os.OpenFile(p, os.O_APPEND|os.O_WRONLY, 0o644); err == nil {
@@ -62,7 +68,7 @@ func syncAliases(cfg *Config) string {
 				f.Close()
 			}
 		}
-		return "Shell alias installed (" + AppName + ")"
+		return "Shell alias installed (" + name + ")"
 	case !cfg.ShellAliases && have:
 		for _, rc := range rcFiles {
 			p := filepath.Join(home, rc)
@@ -72,7 +78,7 @@ func syncAliases(cfg *Config) string {
 			}
 			var keep []string
 			for _, l := range strings.Split(string(data), "\n") {
-				if !strings.HasPrefix(l, "alias "+AppName+"=") {
+				if !strings.HasPrefix(l, "alias "+name+"=") {
 					keep = append(keep, l)
 				}
 			}
@@ -83,14 +89,15 @@ func syncAliases(cfg *Config) string {
 	return ""
 }
 
-// logPath is ~/.local/state/<AppName>/<AppName>.log (XDG state dir).
+// logPath is ~/.local/state/<bin>/<bin>.log (XDG state dir).
 func logPath() string {
 	dir := os.Getenv("XDG_STATE_HOME")
 	if dir == "" {
 		home, _ := os.UserHomeDir()
 		dir = filepath.Join(home, ".local", "state")
 	}
-	return filepath.Join(dir, AppName, AppName+".log")
+	name := binName()
+	return filepath.Join(dir, name, name+".log")
 }
 
 // logf appends one line to the app log (best effort). Never log secrets.

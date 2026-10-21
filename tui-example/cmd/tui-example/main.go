@@ -6,17 +6,29 @@ import (
 	"github.com/tdwgm/tui-example/internal/tui"
 )
 
-func main() {
-	// App metadata flows from here into the TUI so the rest of the package
-	// stays project-agnostic. These are the only lines that name the project.
-	tui.AppName = "tui-example"
-	tui.AppDescription = "Full standard Go TUI example demonstrating all features"
-	// tui.Version is overridable at build time:
-	//   go build -ldflags "-X github.com/tdwgm/tui-example/internal/tui.Version=1.2.3"
+// App identity variables (matching the TUI standard from gu-vpn).
+const (
+	appName        = "GO-TUI"
+	appDescription = "Standardized TUI Framework & Reference Implementation"
+)
 
-	// 3-line double-line banner logo (default when BANNER_FONT="default").
-	tui.BannerArt = `╔╦╗╦ ╦╦   ╔═╗═╗ ╦╔═╗╔╦╗╔═╗╦  ╔═╗
- ║ ║ ║║   ╠═ ╔╩╦╝╠═╣║║║╠═╝║  ╠═ 
- ╩ ╚═╝╩   ╚═╝╩ ╚═╩ ╩╩ ╩╩  ╩═╝╚═╝`
+var (
+	appVersion = "0.1.0"
+	repoURL    = "https://github.com/tdwgm/GO-TUI.git"
+)
+
+// bannerArt is the 3-line double-line logo for GO-TUI.
+const bannerArt = `╔═╗ ╔═╗     ╔╦╗ ╦ ╦ ╦
+║ ╦ ║ ║ ───  ║  ║ ║ ║
+╚═╝ ╚═╝      ╩  ╚═╝ ╩`
+
+func main() {
+	tui.AppName = appName
+	tui.AppDescription = appDescription
+	tui.Version = appVersion
+	tui.RepoURL = repoURL
+	tui.BinaryName = "go-tui"
+	tui.BannerArt = bannerArt
+
 	os.Exit(tui.Main(os.Args[1:], os.Stdout, os.Stderr))
 }

@@ -432,7 +432,7 @@ func (m model) tail(btns []button, sel int, active bool) string {
 	if m.statusMsg != "" {
 		t.WriteString("\n" + flashLine(m.width, classifyMsg(m.statusMsg), m.statusMsg) + "\n")
 	}
-	t.WriteString("\n" + renderMenu(btns, sel, active, m.width) + "\n")
+	t.WriteString("\n" + footerRule() + "\n" + renderMenu(btns, sel, active, m.width) + "\n")
 	return t.String()
 }
 
@@ -562,8 +562,10 @@ func (m model) bodyHelp() string {
 		b.WriteString("\n" + sectionHeader(title) + "\n")
 		b.WriteString(ind(wrapText(m.width-len(indent)-2, fgStyle, text)) + "\n")
 	}
+	bin := binName()
 	sec("About", [][2]string{
 		{"Version", AppName + " v" + Version + "   " + runtime.Version()},
+		{"Repo", RepoURL},
 		{"Config", ConfigPath()},
 		{"Log", logPath()},
 	})
@@ -574,16 +576,16 @@ func (m model) bodyHelp() string {
 	})
 	sec("Shortcuts", helpShortcutRows())
 	sec("Commands", [][2]string{
-		{AppName + " tui", "this interface (default)"},
-		{AppName + " install", "launcher, shell alias, config file in the current format"},
-		{AppName + " doctor", "diagnostics (also Config → Doctor)"},
-		{AppName + " uninstall", "remove launcher + alias"},
-		{AppName + " version", "version"},
-		{AppName + " help", "CLI help"},
+		{bin + " tui", "this interface (default)"},
+		{bin + " install", "launcher, shell alias, config file in the current format"},
+		{bin + " doctor", "diagnostics (also Config → Doctor)"},
+		{bin + " uninstall", "remove launcher + alias"},
+		{bin + " version", "version"},
+		{bin + " help", "CLI help"},
 	})
 	// The application text comes LAST: what the tool's aliases, integrations and
 	// backends are and how they are used. Keep every sentence true to the code.
-	para("Aliases", "`"+AppName+"` is a shell alias for the launcher in ~/.local/bin (Config → Shell shows where it is "+
+	para("Aliases", "`"+bin+"` is a shell alias for the launcher in ~/.local/bin (Config → Shell shows where it is "+
 		"defined; SHELL_ALIASES=false removes it).")
 	para("Integrations", "TODO("+AppName+"): describe each integration and backend here — what it does, where its files live "+
 		"and which config key turns it on (gu: Remmina GU, Bitwarden, KeePass).")

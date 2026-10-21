@@ -67,6 +67,7 @@ func testModel(t *testing.T) model {
 	t.Setenv("XDG_DATA_HOME", "")
 	t.Setenv("XDG_STATE_HOME", "")
 	AppName = "demo"
+	BinaryName = "demo"
 	m := initialModel()
 	m.width = 100
 	m.home.items = []string{"alpha", "bravo", "charlie"}
@@ -91,8 +92,8 @@ func TestTextIndentedOneRule(t *testing.T) {
 				t.Errorf("%s line %d not indented: %q", name, i, l)
 			}
 		}
-		if rules != 1 {
-			t.Errorf("%s has %d rules, want exactly 1", name, rules)
+		if rules != 2 {
+			t.Errorf("%s has %d rules, want exactly 2 (header and footer)", name, rules)
 		}
 	}
 }

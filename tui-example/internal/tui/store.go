@@ -22,7 +22,8 @@ func itemsPath() string {
 		}
 		dir = filepath.Join(home, ".local", "share")
 	}
-	return filepath.Join(dir, AppName, "items.json")
+	name := strings.ToLower(firstNonEmpty(BinaryName, AppName))
+	return filepath.Join(dir, name, "items.json")
 }
 
 // loadItems reads the item list. A missing/empty file yields an empty slice.

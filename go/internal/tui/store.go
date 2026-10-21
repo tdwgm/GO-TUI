@@ -61,5 +61,13 @@ func saveItems(items []string) error {
 
 // seedItems is the first-run demo content, so a fresh scaffold isn't empty.
 func seedItems() []string {
-	return []string{"alpha", "bravo", "charlie", "delta", "echo"}
+	return []string{
+		"Charmbracelet Bubbletea + Lipgloss TUI standard",
+		"Per-element theme customization (accent, banner, headers, text, shortcuts)",
+		"Live info block directly under the banner rule with Nerd Font MDI icons",
+		"Glitter sweep effect across active menu selection",
+		"Config screen mirroring 1:1 with ~/.config/GO-TUI/GO-TUI.conf",
+		"Built-in doctor diagnostic checklist (^d) and log viewer (^l)",
+		"Contextual Help screen (h) with unified shortcuts and CLI command guide",
+	}
 }

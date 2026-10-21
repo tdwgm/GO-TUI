@@ -121,6 +121,7 @@ func applyStyle(cfg *Config) {
 	liveStyle = lipgloss.NewStyle().Foreground(colorFor(cfg.ColorLive, lipgloss.NoColor{}))
 	bylineStyle = subtitleStyle
 	bannerRuleStyle = lipgloss.NewStyle().Foreground(colorFor(cfg.ColorRule, MutedColor)).Faint(true)
+	footerRuleStyle = lipgloss.NewStyle().Foreground(colorFor(cfg.ColorRuleFooter, MutedColor)).Faint(true)
 	uiBannerFont, uiLiveInfo, uiBannerText = cfg.BannerFont, cfg.LiveInfo, cfg.BannerText
 	uiMenuEffect = cfg.MenuEffect
 }

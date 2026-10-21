@@ -8,18 +8,22 @@ import (
 
 // App metadata, set from main() so this package stays project-agnostic.
 var (
-	AppName        = "app"
-	AppDescription = "a bubbletea TUI"
+	AppName        = "GO-TUI"
+	AppDescription = "Standardized TUI Framework & Reference Implementation"
 	// Version is overridable at build time via -ldflags "-X ...tui.Version=x".
-	Version = "0.1.0"
-	// BannerArt is the block logo. Replace it with your own (keep it ≤ 4 lines);
-	// empty = the app name in bold.
-	BannerArt = ""
+	Version    = "0.1.0"
+	RepoURL    = "https://github.com/tdwgm/GO-TUI.git"
+	BinaryName = "go-tui"
+	// BannerArt is the double-line block logo (≤ 4 lines).
+	BannerArt = `╔═╗ ╔═╗     ╔╦╗ ╦ ╦ ╦
+║ ╦ ║ ║ ───  ║  ║ ║ ║
+╚═╝ ╚═╝      ╩  ╚═╝ ╩`
 )
 
 var (
 	bylineStyle     = lipgloss.NewStyle().Foreground(MutedColor)
 	bannerRuleStyle = lipgloss.NewStyle().Foreground(MutedColor).Faint(true)
+	footerRuleStyle = lipgloss.NewStyle().Foreground(MutedColor).Faint(true)
 )
 
 // frakturify maps ASCII letters to Unicode Mathematical Bold Fraktur glyphs

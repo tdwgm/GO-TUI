@@ -101,6 +101,7 @@ func newForm(cfg *Config) *form {
 		choice("Selected text", "COLOR_SELECTED", colorNames),
 		choice("Shortcuts", "COLOR_SHORTCUT", colorNames),
 		choice("Rule", "COLOR_RULE", colorNames),
+		choice("Footer rule", "COLOR_RULE_FOOTER", colorNames),
 		choice("Under logo", "COLOR_SUBTITLE", colorNames),
 		choice("Live info text", "COLOR_LIVE", colorNames),
 		choice("Menu effect", "MENU_EFFECT", menuEffects),

@@ -33,11 +33,12 @@ type Config struct {
 	ColorMuted  string
 	// More theme elements: menu shortcuts, selected menu entry, the dotted
 	// rule, text under the logo, the live info block.
-	ColorShortcut string
-	ColorSelected string
-	ColorRule     string
-	ColorSubtitle string
-	ColorLive     string
+	ColorShortcut   string
+	ColorSelected   string
+	ColorRule       string
+	ColorRuleFooter string
+	ColorSubtitle   string
+	ColorLive       string
 	// BannerText: the logo text; empty = the app name. Any other text is drawn
 	// with the font (block when the font is "default").
 	BannerText string
@@ -63,19 +64,20 @@ type Field struct {
 
 // Fields is the canonical table. Order = order in the config file.
 var Fields = []Field{
-	{"GREETING", "hello", "Line shown on the Home screen.", "General", ""},
+	{"GREETING", "Welcome to GO-TUI — reference implementation of TUI Scaffold v2", "Line shown on the Home screen.", "General", ""},
 	{"ITEMS_SHOWN", "10", "Max items listed before the list scrolls.", "General", ""},
 	{"CONFIRM_DELETE", "true", "Ask before deleting an item.", "Behaviour", ""},
 	{"THEME", "blue", "Accent: blue | green | red | yellow | magenta | cyan | orange | purple", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
 	{"COLOR_BANNER", "accent", "Element colours: accent | default | blue | ocean | green | red | yellow | magenta | cyan | orange | purple | grey | white", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
 	{"COLOR_HEADER", "ocean", "", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
 	{"COLOR_TEXT", "white", "", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
-	{"COLOR_MUTED", "grey", "", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
-	{"COLOR_SHORTCUT", "grey", "Menu shortcuts, selected menu entry, the dotted rule, text under the logo, live info block", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
-	{"COLOR_SELECTED", "default", "", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
+	{"COLOR_MUTED", "accent", "", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
+	{"COLOR_SHORTCUT", "accent", "Menu shortcuts, selected menu entry, the dotted rule, text under the logo, live info block", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
+	{"COLOR_SELECTED", "white", "", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
 	{"COLOR_RULE", "grey", "", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
+	{"COLOR_RULE_FOOTER", "grey", "Divider above bottom menu", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
 	{"COLOR_SUBTITLE", "white", "", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
-	{"COLOR_LIVE", "default", "", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
+	{"COLOR_LIVE", "blue", "", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
 	{"BANNER_TEXT", "", "Banner (Config → Theme → Banner). Text: empty = the app name; any other text is drawn with the font (block when the font is default)", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
 	{"BANNER_FONT", "default", "Font: default (the name) | block | half | slant | shade", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
 	{"LIVE_INFO", "full", "Live info under the banner: full (items, search, host IP) | compact | off", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
@@ -128,9 +130,15 @@ func Load() (*Config, bool, error) {
 	raw, err := os.ReadFile(p)
 	if err != nil {
 		if os.IsNotExist(err) {
-			return Default(), false, nil
+			old := filepath.Join(filepath.Dir(filepath.Dir(p)), strings.ToLower(AppName), strings.ToLower(AppName)+".conf")
+			if oldRaw, oldErr := os.ReadFile(old); oldErr == nil {
+				raw = oldRaw
+			} else {
+				return Default(), false, nil
+			}
+		} else {
+			return nil, false, fmt.Errorf("read %s: %w", p, err)
 		}
-		return nil, false, fmt.Errorf("read %s: %w", p, err)
 	}
 	doc, err := Parse(raw)
 	if err != nil {
@@ -205,12 +213,13 @@ func fromMap(cfg *Config, values map[string]string) {
 	cfg.ColorBanner = oneOf(pick("COLOR_BANNER"), "accent", colorNames)
 	cfg.ColorHeader = oneOf(pick("COLOR_HEADER"), "ocean", colorNames)
 	cfg.ColorText = oneOf(pick("COLOR_TEXT"), "white", colorNames)
-	cfg.ColorMuted = oneOf(pick("COLOR_MUTED"), "grey", colorNames)
-	cfg.ColorShortcut = oneOf(pick("COLOR_SHORTCUT"), "grey", colorNames)
-	cfg.ColorSelected = oneOf(pick("COLOR_SELECTED"), "default", colorNames)
+	cfg.ColorMuted = oneOf(pick("COLOR_MUTED"), "accent", colorNames)
+	cfg.ColorShortcut = oneOf(pick("COLOR_SHORTCUT"), "accent", colorNames)
+	cfg.ColorSelected = oneOf(pick("COLOR_SELECTED"), "white", colorNames)
 	cfg.ColorRule = oneOf(pick("COLOR_RULE"), "grey", colorNames)
+	cfg.ColorRuleFooter = oneOf(pick("COLOR_RULE_FOOTER"), cfg.ColorRule, colorNames)
 	cfg.ColorSubtitle = oneOf(pick("COLOR_SUBTITLE"), "white", colorNames)
-	cfg.ColorLive = oneOf(pick("COLOR_LIVE"), "default", colorNames)
+	cfg.ColorLive = oneOf(pick("COLOR_LIVE"), "blue", colorNames)
 	cfg.BannerText = pick("BANNER_TEXT")
 	cfg.BannerFont = oneOf(pick("BANNER_FONT"), "default", bannerFonts)
 	cfg.LiveInfo = oneOf(pick("LIVE_INFO"), "full", liveInfoModes)
@@ -220,30 +229,31 @@ func fromMap(cfg *Config, values map[string]string) {
 
 func toMap(cfg *Config) map[string]string {
 	return map[string]string{
-		"GREETING":       cfg.Greeting,
-		"ITEMS_SHOWN":    cfg.ItemsShown,
-		"CONFIRM_DELETE": boolStr(cfg.ConfirmDelete),
-		"THEME":          cfg.Theme,
-		"COLOR_BANNER":   cfg.ColorBanner,
-		"COLOR_HEADER":   cfg.ColorHeader,
-		"COLOR_TEXT":     cfg.ColorText,
-		"COLOR_MUTED":    cfg.ColorMuted,
-		"COLOR_SHORTCUT": cfg.ColorShortcut,
-		"COLOR_SELECTED": cfg.ColorSelected,
-		"COLOR_RULE":     cfg.ColorRule,
-		"COLOR_SUBTITLE": cfg.ColorSubtitle,
-		"COLOR_LIVE":     cfg.ColorLive,
-		"BANNER_TEXT":    cfg.BannerText,
-		"BANNER_FONT":    cfg.BannerFont,
-		"LIVE_INFO":      cfg.LiveInfo,
-		"MENU_EFFECT":    cfg.MenuEffect,
-		"SHELL_ALIASES":  boolStr(cfg.ShellAliases),
+		"GREETING":          cfg.Greeting,
+		"ITEMS_SHOWN":       cfg.ItemsShown,
+		"CONFIRM_DELETE":    boolStr(cfg.ConfirmDelete),
+		"THEME":             cfg.Theme,
+		"COLOR_BANNER":      cfg.ColorBanner,
+		"COLOR_HEADER":      cfg.ColorHeader,
+		"COLOR_TEXT":        cfg.ColorText,
+		"COLOR_MUTED":       cfg.ColorMuted,
+		"COLOR_SHORTCUT":    cfg.ColorShortcut,
+		"COLOR_SELECTED":    cfg.ColorSelected,
+		"COLOR_RULE":        cfg.ColorRule,
+		"COLOR_RULE_FOOTER": cfg.ColorRuleFooter,
+		"COLOR_SUBTITLE":    cfg.ColorSubtitle,
+		"COLOR_LIVE":        cfg.ColorLive,
+		"BANNER_TEXT":       cfg.BannerText,
+		"BANNER_FONT":       cfg.BannerFont,
+		"LIVE_INFO":         cfg.LiveInfo,
+		"MENU_EFFECT":       cfg.MenuEffect,
+		"SHELL_ALIASES":     boolStr(cfg.ShellAliases),
 	}
 }
 
 // themeKeys are the keys "Reset to default" restores (theme + banner choices).
 var themeKeys = []string{"THEME", "COLOR_BANNER", "COLOR_HEADER", "COLOR_TEXT", "COLOR_MUTED", "COLOR_SHORTCUT",
-	"COLOR_SELECTED", "COLOR_RULE", "COLOR_SUBTITLE", "COLOR_LIVE", "BANNER_TEXT", "BANNER_FONT", "LIVE_INFO", "MENU_EFFECT"}
+	"COLOR_SELECTED", "COLOR_RULE", "COLOR_RULE_FOOTER", "COLOR_SUBTITLE", "COLOR_LIVE", "BANNER_TEXT", "BANNER_FONT", "LIVE_INFO", "MENU_EFFECT"}
 
 // liveInfoModes are the LIVE_INFO choices.
 var liveInfoModes = []string{"full", "compact", "off"}

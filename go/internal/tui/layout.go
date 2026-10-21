@@ -49,6 +49,11 @@ func rule() string {
 	return bannerRuleStyle.Render(strings.Repeat("·", ruleWidth))
 }
 
+// footerRule is the divider above the bottom menu.
+func footerRule() string {
+	return footerRuleStyle.Render(strings.Repeat("·", ruleWidth))
+}
+
 // screenTitle renders "<bin> › <name>".
 func screenTitle(name string) string {
 	return indent + titleStyle.Render(AppName+" › "+name)

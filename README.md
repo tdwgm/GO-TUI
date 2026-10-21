@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/go-tui.png" alt="GO-TUI Logo" width="800">
+</p>
+
 # GO-TUI
 
 > **Modern, standardized Terminal User Interface (TUI) starter templates and reference implementation in Go ([Bubbletea](https://github.com/charmbracelet/bubbletea) + [Lipgloss](https://github.com/charmbracelet/lipgloss)).**
@@ -11,7 +15,7 @@ GO-TUI provides a production-grade, architectural foundation for terminal tools.
 
 ---
 
-## 🚀 Quick Start: Try the Included Demo
+## Quick Start: Try the Included Demo
 
 A complete, runnable reference implementation is included out-of-the-box in `tui-example/`:
 
@@ -43,7 +47,7 @@ The binary operates as both an interactive TUI and a scriptable CLI:
 
 ---
 
-## ✨ The TUI Standard v2
+## The TUI Standard v2
 
 GO-TUI implements the **TUI Scaffold v2 standard**:
 
@@ -83,7 +87,7 @@ GO-TUI implements the **TUI Scaffold v2 standard**:
 
 ---
 
-## ⌨️ Global Shortcuts
+## Global Shortcuts
 
 | Key | Action | Scope |
 | :--- | :--- | :--- |
@@ -102,7 +106,7 @@ GO-TUI implements the **TUI Scaffold v2 standard**:
 
 ---
 
-## 📦 Repository Structure
+## Repository Structure
 
 ```
 ├── tui-example/              # Full runnable reference implementation (Go)
@@ -121,7 +125,7 @@ GO-TUI implements the **TUI Scaffold v2 standard**:
 
 ---
 
-## 🛠️ Headless Testing
+## Headless Testing
 
 GO-TUI follows the **Elm architecture** (`Init`, `Update`, `View`). All screens, navigation transitions, theme switches, and layout constraints are tested without launching a virtual terminal:
 
@@ -132,6 +136,6 @@ go test -v ./...
 
 ---
 
-## 📄 License
+## License
 
 MIT License. See [LICENSE](LICENSE) for details.

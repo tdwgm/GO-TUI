@@ -6,7 +6,7 @@
 
 ---
 
-## ⚡ Quick Start
+## Quick Start
 
 ### Build and Run
 
@@ -39,7 +39,7 @@ make test
 
 ---
 
-## ✨ Features & Architecture
+## Features & Architecture
 
 ### 1. Banner & Typsnitt
 * **ASCII Art & Fonts**: Renders the application banner with version number (`v0.1.0`) directly following the logo, description, and the distinctive Fraktur byline:
@@ -90,7 +90,7 @@ make test
 
 ---
 
-## ⌨️ Shortcuts Reference
+## Shortcuts Reference
 
 | Key | Action | Scope |
 | :--- | :--- | :--- |
@@ -109,7 +109,7 @@ make test
 
 ---
 
-## 📁 Project Layout
+## Project Layout
 
 ```
 cmd/tui-example/
@@ -136,7 +136,7 @@ Makefile                  # Build, test, run, and clean targets
 
 ---
 
-## 🧪 Testing
+## Testing
 
 The Elm architecture allows full verification of UI state, formatting, scrolling, and theme transitions headlessly without launching a terminal window:
 

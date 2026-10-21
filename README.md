@@ -1,8 +1,6 @@
 <p align="center">
-  <img src="assets/go-tui.png" alt="GO-TUI Logo" width="800">
+  <img src="assets/go-tui.png" alt="GO-TUI" width="800">
 </p>
-
-# GO-TUI
 
 > **Modern, standardized Terminal User Interface (TUI) starter templates and reference implementation in Go ([Bubbletea](https://github.com/charmbracelet/bubbletea) + [Lipgloss](https://github.com/charmbracelet/lipgloss)).**
 

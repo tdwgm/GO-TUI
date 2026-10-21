@@ -14,6 +14,9 @@ func main() {
 	// tui.Version is overridable at build time:
 	//   go build -ldflags "-X github.com/tdwgm/tui-example/internal/tui.Version=1.2.3"
 
-	// tui.BannerArt = "…"  // your block logo (≤ 4 lines); default = the name
+	// 3-line double-line banner logo (default when BANNER_FONT="default").
+	tui.BannerArt = `╔╦╗╦ ╦╦   ╔═╗═╗ ╦╔═╗╔╦╗╔═╗╦  ╔═╗
+ ║ ║ ║║   ╠═ ╔╩╦╝╠═╣║║║╠═╝║  ╠═ 
+ ╩ ╚═╝╩   ╚═╝╩ ╚═╩ ╩╩ ╩╩  ╩═╝╚═╝`
 	os.Exit(tui.Main(os.Args[1:], os.Stdout, os.Stderr))
 }

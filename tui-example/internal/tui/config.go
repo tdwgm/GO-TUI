@@ -63,19 +63,19 @@ type Field struct {
 
 // Fields is the canonical table. Order = order in the config file.
 var Fields = []Field{
-	{"GREETING", "hello", "Line shown on the Home screen.", "General", ""},
+	{"GREETING", "Welcome to TUI Example — reference implementation of TUI Scaffold v2", "Line shown on the Home screen.", "General", ""},
 	{"ITEMS_SHOWN", "10", "Max items listed before the list scrolls.", "General", ""},
 	{"CONFIRM_DELETE", "true", "Ask before deleting an item.", "Behaviour", ""},
 	{"THEME", "blue", "Accent: blue | green | red | yellow | magenta | cyan | orange | purple", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
 	{"COLOR_BANNER", "accent", "Element colours: accent | default | blue | ocean | green | red | yellow | magenta | cyan | orange | purple | grey | white", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
 	{"COLOR_HEADER", "ocean", "", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
 	{"COLOR_TEXT", "white", "", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
-	{"COLOR_MUTED", "grey", "", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
-	{"COLOR_SHORTCUT", "grey", "Menu shortcuts, selected menu entry, the dotted rule, text under the logo, live info block", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
-	{"COLOR_SELECTED", "default", "", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
+	{"COLOR_MUTED", "accent", "", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
+	{"COLOR_SHORTCUT", "accent", "Menu shortcuts, selected menu entry, the dotted rule, text under the logo, live info block", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
+	{"COLOR_SELECTED", "white", "", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
 	{"COLOR_RULE", "grey", "", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
 	{"COLOR_SUBTITLE", "white", "", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
-	{"COLOR_LIVE", "default", "", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
+	{"COLOR_LIVE", "blue", "", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
 	{"BANNER_TEXT", "", "Banner (Config → Theme → Banner). Text: empty = the app name; any other text is drawn with the font (block when the font is default)", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
 	{"BANNER_FONT", "default", "Font: default (the name) | block | half | slant | shade", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
 	{"LIVE_INFO", "full", "Live info under the banner: full (items, search, host IP) | compact | off", "Theme (Config → Theme; \"Reset to default\" restores these)", ""},
@@ -193,12 +193,12 @@ func fromMap(cfg *Config, values map[string]string) {
 	cfg.ColorBanner = oneOf(pick("COLOR_BANNER"), "accent", colorNames)
 	cfg.ColorHeader = oneOf(pick("COLOR_HEADER"), "ocean", colorNames)
 	cfg.ColorText = oneOf(pick("COLOR_TEXT"), "white", colorNames)
-	cfg.ColorMuted = oneOf(pick("COLOR_MUTED"), "grey", colorNames)
-	cfg.ColorShortcut = oneOf(pick("COLOR_SHORTCUT"), "grey", colorNames)
-	cfg.ColorSelected = oneOf(pick("COLOR_SELECTED"), "default", colorNames)
+	cfg.ColorMuted = oneOf(pick("COLOR_MUTED"), "accent", colorNames)
+	cfg.ColorShortcut = oneOf(pick("COLOR_SHORTCUT"), "accent", colorNames)
+	cfg.ColorSelected = oneOf(pick("COLOR_SELECTED"), "white", colorNames)
 	cfg.ColorRule = oneOf(pick("COLOR_RULE"), "grey", colorNames)
 	cfg.ColorSubtitle = oneOf(pick("COLOR_SUBTITLE"), "white", colorNames)
-	cfg.ColorLive = oneOf(pick("COLOR_LIVE"), "default", colorNames)
+	cfg.ColorLive = oneOf(pick("COLOR_LIVE"), "blue", colorNames)
 	cfg.BannerText = pick("BANNER_TEXT")
 	cfg.BannerFont = oneOf(pick("BANNER_FONT"), "default", bannerFonts)
 	cfg.LiveInfo = oneOf(pick("LIVE_INFO"), "full", liveInfoModes)

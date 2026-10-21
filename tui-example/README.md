@@ -67,7 +67,7 @@ make test
 * **Symmetry**: `q` and `Esc` behave identically on every screen (back one level, quits at root).
 
 ### 4. Config Screen (1:1 with Config File)
-* **Roundtrip Configuration**: Every setting on the Config screen maps 1:1 to `~/.config/tui-example/tui-example.conf`.
+* **Roundtrip Configuration**: Every setting on the Config screen maps 1:1 to `~/.config/GO-TUI/GO-TUI.conf`.
 * **Comment Preservation**: Hand-written comments, blank lines, and ordering in the config file are preserved when saving from the TUI.
 * **Element-Level Theme Customization**:
   * Accent (`THEME`: `blue`, `green`, `red`, `yellow`, `magenta`, `cyan`, `orange`, `purple`)
@@ -78,7 +78,7 @@ make test
 
 ### 5. Built-in Doctor & Log Viewer
 * **Doctor (`^d` / `Run doctor`)**: Runs real-time diagnostics verifying configuration files, binary install status, log paths, and shell aliases.
-* **Log Viewer (`^l` / `Log`)**: Integrated tail viewer showing the latest log entries (`~/.local/state/tui-example/tui-example.log`) with Refresh (`r`) and Clear (`c`).
+* **Log Viewer (`^l` / `Log`)**: Integrated tail viewer showing the latest log entries (`~/.local/state/GO-TUI/GO-TUI.log`) with Refresh (`r`) and Clear (`c`).
 
 ### 6. Generated Help Screen (`h`)
 * Generates all help sections automatically from button tables and config keys:
@@ -126,7 +126,7 @@ internal/tui/
   home.go                 # Home screen: overview, live search, item store
   layout.go               # Screen grammar: indentation, single rule, tuta-style rows, bottom menu
   parse.go                # Atomic, comment-preserving KEY="value" config parser
-  store.go                # JSON item storage (~/.local/share/tui-example/items.json)
+  store.go                # JSON item storage (~/.local/share/GO-TUI/items.json)
   style.go                # Color themes, named Lipgloss styles, and glitter effects
   system.go               # Shell alias installer, doctor checks, log file management
   util.go                 # String utilities, truncation, and window scrolling

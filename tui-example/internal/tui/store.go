@@ -22,8 +22,7 @@ func itemsPath() string {
 		}
 		dir = filepath.Join(home, ".local", "share")
 	}
-	name := strings.ToLower(firstNonEmpty(BinaryName, AppName))
-	return filepath.Join(dir, name, "items.json")
+	return filepath.Join(dir, AppName, "items.json")
 }
 
 // loadItems reads the item list. A missing/empty file yields an empty slice.
@@ -67,7 +66,7 @@ func seedItems() []string {
 		"Per-element theme customization (accent, banner, headers, text, shortcuts)",
 		"Live info block directly under the banner rule with Nerd Font MDI icons",
 		"Glitter sweep effect across active menu selection",
-		"Config screen mirroring 1:1 with ~/.config/tui-example/tui-example.conf",
+		"Config screen mirroring 1:1 with ~/.config/GO-TUI/GO-TUI.conf",
 		"Built-in doctor diagnostic checklist (^d) and log viewer (^l)",
 		"Contextual Help screen (h) with unified shortcuts and CLI command guide",
 	}

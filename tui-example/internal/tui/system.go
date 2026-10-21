@@ -89,15 +89,14 @@ func syncAliases(cfg *Config) string {
 	return ""
 }
 
-// logPath is ~/.local/state/<bin>/<bin>.log (XDG state dir).
+// logPath is ~/.local/state/<AppName>/<AppName>.log (XDG state dir).
 func logPath() string {
 	dir := os.Getenv("XDG_STATE_HOME")
 	if dir == "" {
 		home, _ := os.UserHomeDir()
 		dir = filepath.Join(home, ".local", "state")
 	}
-	name := binName()
-	return filepath.Join(dir, name, name+".log")
+	return filepath.Join(dir, AppName, AppName+".log")
 }
 
 // logf appends one line to the app log (best effort). Never log secrets.

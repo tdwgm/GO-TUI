@@ -102,8 +102,7 @@ func ConfigPath() string {
 	if err != nil {
 		return ""
 	}
-	name := strings.ToLower(firstNonEmpty(BinaryName, AppName))
-	return filepath.Join(home, ".config", name, name+".conf")
+	return filepath.Join(home, ".config", AppName, AppName+".conf")
 }
 
 // displayPath shortens paths starting with the user's home directory to ~/....
@@ -131,9 +130,15 @@ func Load() (*Config, bool, error) {
 	raw, err := os.ReadFile(p)
 	if err != nil {
 		if os.IsNotExist(err) {
-			return Default(), false, nil
+			old := filepath.Join(filepath.Dir(filepath.Dir(p)), strings.ToLower(AppName), strings.ToLower(AppName)+".conf")
+			if oldRaw, oldErr := os.ReadFile(old); oldErr == nil {
+				raw = oldRaw
+			} else {
+				return Default(), false, nil
+			}
+		} else {
+			return nil, false, fmt.Errorf("read %s: %w", p, err)
 		}
-		return nil, false, fmt.Errorf("read %s: %w", p, err)
 	}
 	doc, err := Parse(raw)
 	if err != nil {

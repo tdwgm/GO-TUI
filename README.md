@@ -114,10 +114,8 @@ GO-TUI implements the **TUI Scaffold v2 standard**:
 │   ├── cmd/{{PROJECT_NAME}}/ # Templated main.go
 │   ├── internal/tui/         # Core TUI framework modules
 │   └── go.mod.tmpl           # Go module template
-├── python/                   # Companion Python starter template (Textual + uv)
-├── bash/                     # Companion Bash 4+ starter template
 ├── Makefile                  # Build, test, and run helpers
-├── setup.sh                  # Host dependency validator
+├── LICENSE
 └── README.md
 ```
 

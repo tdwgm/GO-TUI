@@ -98,7 +98,7 @@ class Form:
         self.base = dict(cfg)
         self.rows: list[dict] = []
         add = self.rows.append
-        add({"kind": "info", "label": "Config", "value": str(cfgmod.config_path())})
+        add({"kind": "info", "label": "Config", "value": cfgmod.display_path(cfgmod.config_path())})
         add({"kind": "header", "label": "General"})
         add({"kind": "text", "label": "Greeting", "key": "GREETING", "value": cfg["GREETING"]})
         add({"kind": "text", "label": "Items shown", "key": "ITEMS_SHOWN", "value": cfg["ITEMS_SHOWN"]})
@@ -126,7 +126,7 @@ class Form:
         add({"kind": "header", "label": "Doctor"})
         add({"kind": "action", "label": "Run doctor", "action": "doctor"})
         add({"kind": "header", "label": "Log"})
-        add({"kind": "info", "label": "Log file", "value": str(system.log_path())})
+        add({"kind": "info", "label": "Log file", "value": cfgmod.display_path(system.log_path())})
         self.focus = self.selectable()[0]
         self.in_menu = False
         self.btn = 0
@@ -512,7 +512,7 @@ class Model:
 
     def _body(self) -> tuple[str, str]:
         if self.state == "log":
-            lines = ["", header("Log") + "  " + muted(str(system.log_path()))]
+            lines = ["", header("Log") + "  " + muted(cfgmod.display_path(system.log_path()))]
             lines += [INDENT + "  " + (muted("(empty)"))] if not self.log_lines else [
                 INDENT + "  " + fg(l) for l in self.log_lines]
             return "Log", "\n".join(lines) + "\n"
@@ -528,8 +528,8 @@ class Model:
     def _home(self) -> str:
         w = self.width
         out = ["", header("Overview"), info("Greeting", value_or_dash(self.cfg["GREETING"]), w),
-               info("Items", fg(f"{len(self.items)} · {items_path()}"), w),
-               info("Config", fg(str(cfgmod.config_path())), w), "", header("Items"),
+               info("Items", fg(f"{len(self.items)} · {cfgmod.display_path(items_path())}"), w),
+               info("Config", fg(cfgmod.display_path(cfgmod.config_path())), w), "", header("Items"),
                row(not self.menu_active and self.focus == 0, "New item",
                    fg(self.new_text) or muted("type and press Enter"), w),
                row(not self.menu_active and self.focus == 1, "Search", fg(self.search) or muted("filter"), w)]
@@ -578,7 +578,7 @@ class Model:
             out.append(wrap(text, self.width, fg))
 
         sec("About", [("Version", f"{meta.APP_NAME} v{meta.VERSION}   Python {platform.python_version()}"),
-                      ("Config", str(cfgmod.config_path())), ("Log", str(system.log_path()))])
+                      ("Config", cfgmod.display_path(cfgmod.config_path())), ("Log", cfgmod.display_path(system.log_path()))])
         sec("Icons (under the banner, while there are items)",
             [("\U000F0279  Items", "number of items"), ("\U000F0349  Search", "the current search"),
              ("\U000F0317  Host", "this machine's LAN address")])
@@ -644,12 +644,12 @@ def doctor_lines() -> tuple[list[str], int]:
         bad += 0 if okv else 1
         lines.append(f"  {'✓' if okv else '✗'}  {what:<14} {detail}")
 
-    rowp(True, "config", f"{cfgmod.config_path()} (found={found})")
-    rowp(system.launcher_path().exists(), "installed", str(system.launcher_path()))
+    rowp(True, "config", f"{cfgmod.display_path(cfgmod.config_path())} (found={found})")
+    rowp(system.launcher_path().exists(), "installed", cfgmod.display_path(system.launcher_path()))
     if system.aliases_supported():
         where = system.alias_where()
         rowp(cfgmod.truthy(cfg.get("SHELL_ALIASES", "false")) == bool(where), "shell alias", f"at {where}")
-    rowp(True, "log", str(system.log_path()))
+    rowp(True, "log", cfgmod.display_path(system.log_path()))
     return lines, bad
 
 

@@ -83,7 +83,7 @@ def usage() -> None:
                  ("uninstall", "remove the launcher and the alias (config kept)"),
                  ("version", "print the version"), ("help", "this text")]:
         print(f"  {c:<10} {d}")
-    print(f"\nConfig: {cfgmod.config_path()}\nLog:    {system.log_path()}")
+    print(f"\nConfig: {cfgmod.display_path(cfgmod.config_path())}\nLog:    {cfgmod.display_path(system.log_path())}")
 
 
 def main() -> None:

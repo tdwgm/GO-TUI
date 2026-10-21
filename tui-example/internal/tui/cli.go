@@ -60,7 +60,7 @@ func usage(w io.Writer) {
 	} {
 		fmt.Fprintf(w, "  %-10s %s\n", c[0], c[1])
 	}
-	fmt.Fprintf(w, "\nConfig: %s\nLog:    %s\n", ConfigPath(), logPath())
+	fmt.Fprintf(w, "\nConfig: %s\nLog:    %s\n", displayPath(ConfigPath()), displayPath(logPath()))
 }
 
 func doctor(w io.Writer) int {
@@ -74,18 +74,18 @@ func doctor(w io.Writer) int {
 		fmt.Fprintf(w, "  %s  %-14s %s\n", mark, what, detail)
 	}
 	cfg, found, err := Load()
-	row(err == nil, "config", fmt.Sprintf("%s (found=%v)", ConfigPath(), found))
+	row(err == nil, "config", fmt.Sprintf("%s (found=%v)", displayPath(ConfigPath()), found))
 	if cfg == nil {
 		cfg = Default()
 	}
 	_, ierr := os.Stat(installedBinary())
-	row(ierr == nil, "installed", installedBinary())
+	row(ierr == nil, "installed", displayPath(installedBinary()))
 	if aliasesSupported() {
 		where := aliasWhere()
 		row(cfg.ShellAliases == (len(where) > 0), "shell alias", fmt.Sprintf("want=%v at %v", cfg.ShellAliases, where))
 	}
 	_, lerr := os.Stat(logPath())
-	row(lerr == nil || os.IsNotExist(lerr), "log", logPath())
+	row(lerr == nil || os.IsNotExist(lerr), "log", displayPath(logPath()))
 	if bad > 0 {
 		return 1
 	}

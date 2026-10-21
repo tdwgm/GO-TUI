@@ -243,8 +243,8 @@ func (m model) bodyHome() string {
 	var b strings.Builder
 	b.WriteString("\n" + sectionHeader("Overview") + "\n")
 	b.WriteString(infoLine("Greeting", valueOrDash(m.cfg.Greeting)) + "\n")
-	b.WriteString(infoLine("Items", fgStyle.Render(fmt.Sprintf("%d · %s", len(h.items), itemsPath()))) + "\n")
-	b.WriteString(infoLine("Config", fgStyle.Render(ConfigPath())) + "\n")
+	b.WriteString(infoLine("Items", fgStyle.Render(fmt.Sprintf("%d · %s", len(h.items), displayPath(itemsPath())))) + "\n")
+	b.WriteString(infoLine("Config", fgStyle.Render(displayPath(ConfigPath()))) + "\n")
 	b.WriteString("\n" + sectionHeader("Items") + "\n")
 	b.WriteString(rowLine(!m.menuActive && h.focus == 0, "New item", h.newIn.View()) + "\n")
 	b.WriteString(rowLine(!m.menuActive && h.focus == 1, "Search", h.search.View()) + "\n")

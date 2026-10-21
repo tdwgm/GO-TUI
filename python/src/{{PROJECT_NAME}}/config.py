@@ -58,6 +58,13 @@ def config_path() -> Path:
     return Path.home() / ".config" / meta.APP_NAME / f"{meta.APP_NAME}.conf"
 
 
+def display_path(p: Path | str) -> str:
+    try:
+        return f"~/{Path(p).resolve().relative_to(Path.home().resolve())}"
+    except (ValueError, RuntimeError):
+        return str(p)
+
+
 def defaults() -> dict:
     return {k: d for k, d, _, _, o in FIELDS if on_this_os(o)}
 
@@ -84,7 +91,7 @@ def load() -> tuple[dict, bool]:
 
 
 def _template() -> list[str]:
-    lines = [f"# {meta.APP_NAME} configuration ({config_path()}). Edit here or on the Config screen.",
+    lines = [f"# {meta.APP_NAME} configuration ({display_path(config_path())}). Edit here or on the Config screen.",
              '# Format: shell-style KEY="value" with # comments.']
     section = None
     for k, d, desc, sec, o in FIELDS:

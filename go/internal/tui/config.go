@@ -103,6 +103,18 @@ func ConfigPath() string {
 	return filepath.Join(home, ".config", AppName, AppName+".conf")
 }
 
+// displayPath shortens paths starting with the user's home directory to ~/....
+func displayPath(p string) string {
+	if p == "" {
+		return ""
+	}
+	home, err := os.UserHomeDir()
+	if err == nil && home != "" && strings.HasPrefix(p, home) {
+		return "~" + strings.TrimPrefix(p, home)
+	}
+	return p
+}
+
 // Default returns a Config populated with the defaults declared in Fields.
 func Default() *Config {
 	c := &Config{}
@@ -264,7 +276,7 @@ func boolStr(b bool) string {
 // description at its default value.
 func configTemplate() *Doc {
 	d := NewDoc()
-	d.AppendComment(AppName + " configuration (" + ConfigPath() + "). Edit here or on the Config screen.")
+	d.AppendComment(AppName + " configuration (" + displayPath(ConfigPath()) + "). Edit here or on the Config screen.")
 	d.AppendComment(`Format: shell-style KEY="value" with # comments.`)
 	var lastSection string
 	for _, f := range Fields {

@@ -86,7 +86,7 @@ func newForm(cfg *Config) *form {
 
 	f := &form{base: cfg}
 	f.rows = []formRow{
-		info("Config", ConfigPath()),
+		info("Config", displayPath(ConfigPath())),
 		header("General"),
 		text("Greeting", "GREETING"),
 		text("Items shown", "ITEMS_SHOWN"),
@@ -129,7 +129,7 @@ func newForm(cfg *Config) *form {
 	}
 	f.rows = append(f.rows,
 		header("Doctor"), formRow{kind: rowAction, label: "Run doctor", action: "doctor"},
-		header("Log"), info("Log file", logPath()))
+		header("Log"), info("Log file", displayPath(logPath())))
 	f.buttons = configMenu
 	f.focusRow(f.firstSelectable())
 	return f

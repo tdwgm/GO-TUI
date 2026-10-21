@@ -61,7 +61,7 @@ _fchoice() { # label key "choices..."
 
 form_new() {
     F_KIND=() F_LABEL=() F_KEYS=() F_VAL=() F_CHOICES=() F_IDX=() F_ACT=()
-    _frow info Config "" "$(config_path)" "" 0 ""
+    _frow info Config "" "$(display_path "$(config_path)")" "" 0 ""
     _frow header General "" "" "" 0 ""
     _frow text Greeting GREETING "${CFG[GREETING]}" "" 0 ""
     _frow text "Items shown" ITEMS_SHOWN "${CFG[ITEMS_SHOWN]}" "" 0 ""
@@ -94,7 +94,7 @@ form_new() {
     _frow header Doctor "" "" "" 0 ""
     _frow action "Run doctor" "" "" "" 0 doctor
     _frow header Log "" "" "" 0 ""
-    _frow info "Log file" "" "$(log_path)" "" 0 ""
+    _frow info "Log file" "" "$(display_path "$(log_path)")" "" 0 ""
     F_INMENU=0 F_BTN=0
     F_FOCUS=$(_fsel | head -1)
 }
@@ -397,7 +397,7 @@ _shortcut_rows() {
 _help_body() {
     _sec() { printf '\n%s\n' "$(header "$1")"; shift; while (( $# )); do printf '%s\n' "$(info "$1" "$2")"; shift 2; done; }
     _para() { printf '\n%s\n' "$(header "$1")"; printf '%s\n' "$2" | fold -s -w $(( ${COLS:-100} - ${#INDENT} - 2 )) | while IFS= read -r l; do printf '%s%s\n' "$INDENT" "$(fg "$l")"; done; }
-    _sec About Version "$APP_NAME v$VERSION   bash $BASH_VERSION" Config "$(config_path)" Log "$(log_path)"
+    _sec About Version "$APP_NAME v$VERSION   bash $BASH_VERSION" Config "$(display_path "$(config_path)")" Log "$(display_path "$(log_path)")"
     _sec "Icons (under the banner, while there are items)" $'\U000F0279  Items' "number of items" \
         $'\U000F0349  Search' "the current search" $'\U000F0317  Host' "this machine's LAN address"
     local -a rows=("Tab, ↓" "into the menu (first entry selected)" "← / →" "between menu entries · change a choice in Config" \
@@ -415,7 +415,7 @@ _help_body() {
 
 _body() {
     case "$STATE" in
-        log) printf '\n%s  %s\n' "$(header Log)" "$(muted "$(log_path)")"
+        log) printf '\n%s  %s\n' "$(header Log)" "$(muted "$(display_path "$(log_path)")")"
             if [[ -s "$(log_path)" ]]; then tail -n 200 "$(log_path)" | while IFS= read -r l; do printf '%s  %s\n' "$INDENT" "$(fg "$l")"; done
             else printf '%s  %s\n' "$INDENT" "$(muted '(empty)')"; fi ;;
         help) _help_body ;;
@@ -434,8 +434,8 @@ _home_body() {
     [[ "$n" =~ ^[0-9]+$ ]] || n=10
     printf '\n%s\n' "$(header Overview)"
     if [[ -n "${CFG[GREETING]}" ]]; then printf '%s\n' "$(info Greeting "${CFG[GREETING]}")"; else printf '%s  %s %s\n' "$INDENT" "$(fg "$(printf '%-*s' "$LABEL_WIDTH" 'Greeting:')")" "$(muted —)"; fi
-    printf '%s\n' "$(info Items "${#ITEMS[@]} · $(items_path)")"
-    printf '%s\n' "$(info Config "$(config_path)")"
+    printf '%s\n' "$(info Items "${#ITEMS[@]} · $(display_path "$(items_path)")")"
+    printf '%s\n' "$(info Config "$(display_path "$(config_path)")")"
     printf '\n%s\n' "$(header Items)"
     nt=$(fg "$NEW_TEXT"); [[ -z "$NEW_TEXT" ]] && nt=$(muted "type and press Enter")
     st=$(fg "$SEARCH"); [[ -z "$SEARCH" ]] && st=$(muted filter)

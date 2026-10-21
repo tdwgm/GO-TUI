@@ -45,6 +45,15 @@ _on_os() { [[ -z "$1" ]] || { [[ "$1" == unix ]] && [[ "$(uname -s)" != MINGW* ]
 
 config_path() { printf '%s/.config/%s/%s.conf' "$HOME" "$APP_NAME" "$APP_NAME"; }
 
+display_path() {
+    local p="$1"
+    if [[ -n "$HOME" && "$p" == "$HOME"* ]]; then
+        printf '~%s' "${p#"$HOME"}"
+    else
+        printf '%s' "$p"
+    fi
+}
+
 config_defaults() {
     local f
     CFG=()
@@ -81,7 +90,7 @@ config_load() {
 
 _template() {
     local f sec=""
-    printf '# %s configuration (%s). Edit here or on the Config screen.\n' "$APP_NAME" "$(config_path)"
+    printf '# %s configuration (%s). Edit here or on the Config screen.\n' "$APP_NAME" "$(display_path "$(config_path)")"
     printf '# Format: shell-style KEY="value" with # comments.\n'
     for f in "${FIELDS[@]}"; do
         _field "$f"

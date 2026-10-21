@@ -62,7 +62,7 @@ do_install() {
     config_load || true
     msg=$(sync_aliases)
     if [[ -n "$msg" ]]; then echo "$msg"; fi
-    config_save_fresh && echo "Config file written in the current format: $(config_path)"
+    config_save_fresh && echo "Config file written in the current format: $(display_path "$(config_path)")"
 }
 
 do_uninstall() {
@@ -76,8 +76,8 @@ doctor() {
     local bad=0 found=true where
     config_load || found=false
     _row() { if [[ "$1" == 1 ]]; then printf '  ✓  %-14s %s\n' "$2" "$3"; else printf '  ✗  %-14s %s\n' "$2" "$3"; bad=1; fi; }
-    _row 1 config "$(config_path) (found=$found)"
-    if [[ -e "$(launcher_path)" ]]; then _row 1 installed "$(launcher_path)"; else _row 0 installed "$(launcher_path)"; fi
+    _row 1 config "$(display_path "$(config_path)") (found=$found)"
+    if [[ -e "$(launcher_path)" ]]; then _row 1 installed "$(display_path "$(launcher_path)")"; else _row 0 installed "$(display_path "$(launcher_path)")"; fi
     if aliases_supported; then
         where=$(alias_where | paste -sd' ')
         if { truthy "${CFG[SHELL_ALIASES]}" && [[ -n "$where" ]]; } || { ! truthy "${CFG[SHELL_ALIASES]}" && [[ -z "$where" ]]; }; then
@@ -86,6 +86,6 @@ doctor() {
             _row 0 "shell alias" "SHELL_ALIASES=${CFG[SHELL_ALIASES]} but at ${where:-—}"
         fi
     fi
-    _row 1 log "$(log_path)"
+    _row 1 log "$(display_path "$(log_path)")"
     return $bad
 }

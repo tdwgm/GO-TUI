@@ -513,7 +513,7 @@ func classifyMsg(msg string) msgKind {
 
 func (m model) bodyLog() string {
 	var b strings.Builder
-	b.WriteString("\n" + fitLine(sectionHeader("Log")+"  "+mutedStyle.Render(logPath())) + "\n")
+	b.WriteString("\n" + fitLine(sectionHeader("Log")+"  "+mutedStyle.Render(displayPath(logPath()))) + "\n")
 	if len(m.logLines) == 0 {
 		b.WriteString(indent + "  " + mutedStyle.Render("(empty)") + "\n")
 	}
@@ -564,8 +564,8 @@ func (m model) bodyHelp() string {
 	}
 	sec("About", [][2]string{
 		{"Version", AppName + " v" + Version + "   " + runtime.Version()},
-		{"Config", ConfigPath()},
-		{"Log", logPath()},
+		{"Config", displayPath(ConfigPath())},
+		{"Log", displayPath(logPath())},
 	})
 	sec("Icons (under the banner, while there are items)", [][2]string{
 		{"\U000F0279  Items", "number of items"},

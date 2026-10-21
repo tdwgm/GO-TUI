@@ -86,8 +86,8 @@ def install(project_dir: Path) -> list[str]:
     if msg := sync_aliases(cfg):
         out.append(msg)
     save_fresh(cfg)
-    from .config import config_path
-    out.append(f"Config file written in the current format: {config_path()}")
+    from .config import config_path, display_path
+    out.append(f"Config file written in the current format: {display_path(config_path())}")
     return out
 
 

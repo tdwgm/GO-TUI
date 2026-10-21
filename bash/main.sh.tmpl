@@ -31,7 +31,7 @@ usage() {
         doctor "check config, launcher, alias, log" \
         uninstall "remove the launcher and the alias (config kept)" \
         version "print the version" help "this text"
-    printf '\nConfig: %s\nLog:    %s\n' "$(config_path)" "$(log_path)"
+    printf '\nConfig: %s\nLog:    %s\n' "$(display_path "$(config_path)")" "$(display_path "$(log_path)")"
 }
 
 

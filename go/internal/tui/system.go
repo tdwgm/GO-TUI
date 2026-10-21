@@ -150,9 +150,9 @@ func install(w io.Writer) error {
 		if err := os.Chmod(dst, 0o755); err != nil {
 			return err
 		}
-		fmt.Fprintln(w, "Installed", dst)
+		fmt.Fprintln(w, "Installed", displayPath(dst))
 	} else {
-		fmt.Fprintln(w, "Already installed at", dst)
+		fmt.Fprintln(w, "Already installed at", displayPath(dst))
 	}
 	if msg := syncAliases(cfg); msg != "" {
 		fmt.Fprintln(w, msg)
@@ -160,7 +160,7 @@ func install(w io.Writer) error {
 	if err := SaveFresh(cfg); err != nil {
 		return err
 	}
-	fmt.Fprintln(w, "Config file written in the current format:", ConfigPath())
+	fmt.Fprintln(w, "Config file written in the current format:", displayPath(ConfigPath()))
 	return nil
 }
 

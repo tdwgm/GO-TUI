@@ -1,0 +1,78 @@
+# {{PROJECT_NAME}}
+
+{{DESCRIPTION}}
+
+Scaffolded on {{DATE}} from `~/scripts/tui-cli-template/python/`.
+
+## Requirements
+
+- Python 3.11+
+- [uv](https://docs.astral.sh/uv/) (recommended)
+
+If uv is missing:
+
+```bash
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
+## Build & run
+
+```bash
+# Install dependencies and run via entry point
+uv sync
+uv run {{PROJECT_NAME}}
+
+# Or run the shim directly
+uv run python main.py
+
+# Without uv (standard venv)
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -e .
+{{PROJECT_NAME}}
+```
+
+## Key bindings
+
+### Home screen
+
+| Key       | Action           |
+|-----------|------------------|
+| `d`       | Open demo list   |
+| `i`       | Show info        |
+| `?`       | Show help        |
+| `q`       | Quit             |
+| `↑` / `k` | Move cursor up   |
+| `↓` / `j` | Move cursor down |
+| `Enter`   | Activate item    |
+| `Ctrl+C`  | Quit             |
+
+### Detail screen
+
+| Key       | Action           |
+|-----------|------------------|
+| `Esc`     | Back to home     |
+| `↑` / `k` | Move cursor up   |
+| `↓` / `j` | Move cursor down |
+| `c`       | Copy item        |
+
+## File structure
+
+```
+{{PROJECT_NAME}}/
+├── pyproject.toml        # Project metadata and dependencies
+├── main.py               # Entry shim for python main.py
+├── .python-version       # Pinned Python version (3.12)
+└── src/{{PROJECT_NAME}}/
+    ├── __init__.py
+    ├── app.py            # MainApp class and main() entry point
+    ├── app.tcss          # Textual CSS (Nord palette)
+    └── screens/
+        ├── __init__.py
+        ├── home.py       # HomeScreen with menu and bindings
+        └── detail.py     # DetailScreen with list and copy action
+```
+
+---
+
+Author: {{AUTHOR}} | Date: {{DATE}}

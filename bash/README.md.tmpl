@@ -1,0 +1,68 @@
+# {{PROJECT_NAME}}
+
+A terminal UI application built from the `~/scripts/tui-cli-template/bash/` scaffold.
+
+## Requirements
+
+- Bash 4.2+
+- A real TTY (will not work when stdin or stdout are piped)
+- A terminal that supports truecolor (24-bit) ANSI — all modern terminals qualify
+
+## Running
+
+```bash
+chmod +x main.sh      # once, after scaffolding
+bash main.sh          # explicit interpreter
+./main.sh             # or directly if executable
+```
+
+## Navigation keys
+
+| Key | Action |
+|-----|--------|
+| `1`–`9` | Select numbered item |
+| `?` | Help screen |
+| `b` | Back (return to parent menu) |
+| `q` | Quit (works from any menu) |
+| Enter | Ignored (re-prompts) |
+
+Arrow keys are **not** used. Navigation is purely by number/letter keys pressed once — no Enter needed.
+
+## File structure
+
+```
+.
+├── main.sh              # Entry point — sources lib/, runs main_menu
+└── lib/
+    ├── colors.sh        # Readonly ANSI escape constants (Nord palette)
+    ├── screen.sh        # clear_screen, render_header, render_footer
+    ├── menu.sh          # render_menu, read_choice, flash
+    └── screens/
+        ├── home.sh      # main_menu — top-level dispatch (1/2/?/q)
+        └── detail.sh    # detail_menu — example nested list (1-5/b/q)
+```
+
+## Extending
+
+1. Add `lib/screens/<name>.sh` with a `<name>_menu()` function.
+2. Guard it with `[[ -n "${_NAME_SH_LOADED:-}" ]] && return 0; readonly _NAME_SH_LOADED=1`.
+3. Source it in `main.sh` after the other screens.
+4. Add a dispatch case in `main_menu` (in `lib/screens/home.sh`) to call it.
+
+Use `render_header`, `render_menu`, `read_choice`, and `flash` from `lib/menu.sh` for consistent
+styling. Add new constants to `lib/colors.sh` using existing Nord variables; never hard-code hex
+values inline.
+
+## Nord colour palette
+
+| Constant | Role | Hex |
+|----------|------|-----|
+| `$ACCENT` | Menu keys, highlights | `#88C0D0` |
+| `$OK` | Success messages | `#A3BE8C` |
+| `$ERR` | Error / invalid input | `#BF616A` |
+| `$MUTED` | Decorative lines | `#3B4252` |
+| `$NORD4` | Body text | `#D8DEE9` |
+
+---
+
+Author: {{AUTHOR}} — {{DATE}}

@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# {{PROJECT_NAME}} — TUI scaffolded {{DATE}} from ~/scripts/tui-cli-template/bash/
+# (TUI Scaffold standard v2.1). Commands: tui (default) | install | doctor |
+# uninstall | version | help. The TUI needs a real terminal.
+set -uo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
+
+APP_NAME="{{PROJECT_NAME}}"
+APP_DESC="{{DESCRIPTION}}"
+VERSION="0.1.0"
+BANNER_ART=""   # your block logo (≤ 4 lines); empty = the name in bold
+
+# shellcheck source=lib/font.sh
+. "$SCRIPT_DIR/lib/font.sh"
+# shellcheck source=lib/standard.sh
+. "$SCRIPT_DIR/lib/standard.sh"
+# shellcheck source=lib/config.sh
+. "$SCRIPT_DIR/lib/config.sh"
+# shellcheck source=lib/system.sh
+. "$SCRIPT_DIR/lib/system.sh"
+# shellcheck source=lib/app.sh
+. "$SCRIPT_DIR/lib/app.sh"
+
+usage() {
+    config_load || true; theme_apply
+    printf '%s\n\n' "$(banner)"
+    printf 'Usage: %s [command]   (no command opens the TUI)\n\n' "$APP_NAME"
+    printf '  %-10s %s\n' tui "the interactive UI (default)" \
+        install "launcher in ~/.local/bin, shell alias, config file in the current format" \
+        doctor "check config, launcher, alias, log" \
+        uninstall "remove the launcher and the alias (config kept)" \
+        version "print the version" help "this text"
+    printf '\nConfig: %s\nLog:    %s\n' "$(config_path)" "$(log_path)"
+}
+
+
+case "${1:-}" in
+    ""|tui) tui_run ;;
+    help|info|-h|--help) usage ;;
+    version|-v|--version)
+        if [[ -t 1 ]]; then config_load || true; theme_apply; printf '%s\n\n' "$(banner)"; fi
+        printf '%s v%s (bash %s)\n' "$APP_NAME" "$VERSION" "$BASH_VERSION" ;;
+    install) config_load || true; theme_apply; printf '%s\n\n' "$(banner)"; do_install ;;
+    uninstall) do_uninstall; echo "Removed $(launcher_path) and the shell alias (config kept)." ;;
+    doctor) doctor ;;
+    *) echo "unknown command: $1" >&2; usage; exit 1 ;;
+esac

@@ -1,0 +1,19 @@
+package main
+
+import (
+	"os"
+
+	"{{MODULE_PATH}}/internal/tui"
+)
+
+func main() {
+	// App metadata flows from here into the TUI so the rest of the package
+	// stays project-agnostic. These are the only lines that name the project.
+	tui.AppName = "{{PROJECT_NAME}}"
+	tui.AppDescription = "{{DESCRIPTION}}"
+	// tui.Version is overridable at build time:
+	//   go build -ldflags "-X {{MODULE_PATH}}/internal/tui.Version=1.2.3"
+
+	// tui.BannerArt = "…"  // your block logo (≤ 4 lines); default = the name
+	os.Exit(tui.Main(os.Args[1:], os.Stdout, os.Stderr))
+}

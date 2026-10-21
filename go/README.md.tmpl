@@ -1,0 +1,54 @@
+# {{PROJECT_NAME}}
+
+{{DESCRIPTION}}
+
+A bubbletea + lipgloss TUI generated from `~/scripts/tui-cli-template/go/`. It
+ships a working **item manager** demo so you have real patterns to adapt rather
+than empty stubs.
+
+## Build & run
+
+```bash
+make build              # → bin/{{PROJECT_NAME}}  (injects version via ldflags)
+./bin/{{PROJECT_NAME}}
+# or, during development:
+make run
+make test
+```
+
+## What it does (the demo)
+
+- **Home** — add items, **live search/filter**, a scrolling list, and a Config entry.
+  - Tab / Shift+Tab cycle focus: Add field → Filter field → list.
+  - In the list: ↑/↓ (or j/k) select · Enter/c copy to clipboard · x delete · o Config · q quit.
+  - **Ctrl+C quits from anywhere** (q only quits while the list is focused — it
+    types into the Add/Filter fields otherwise).
+- **Config** — an Options screen editing `~/.config/{{PROJECT_NAME}}/{{PROJECT_NAME}}.conf`:
+  inline text edit, a **radio overlay** (Theme), a **bool toggle** (Confirm delete),
+  "Edit config in $EDITOR", and "Reload from disk". The file is comment-preserving
+  and round-trip safe, so hand-edits survive.
+
+## Structure
+
+```
+cmd/{{PROJECT_NAME}}/main.go   — entry point; sets app name/description, calls tui.Run
+internal/tui/app.go            — model, screen dispatch, async load, Run()
+internal/tui/home.go           — home dashboard (add / search / list / delete)
+internal/tui/options.go        — settings screen (edit / radio / toggle / $EDITOR)
+internal/tui/config.go         — Config struct, Fields table, load/save
+internal/tui/parse.go          — round-trip KEY="value" config parser
+internal/tui/store.go          — JSON item store (~/.local/share/{{PROJECT_NAME}}/)
+internal/tui/style.go          — palette + named lipgloss styles
+internal/tui/banner.go         — banner: name · description · version · byline
+internal/tui/util.go           — clipboard, atomic write, list-scroll window
+internal/tui/app_test.go       — table of model/render/round-trip tests
+```
+
+## Make it yours
+
+1. Edit the four demo settings in `config.go` (`Fields` + `Config` + `fromMap`/`toMap`/`applyEdit`).
+2. Replace the `[]string` items in `store.go` and `home.go` with your domain type.
+3. Add screens by extending the `screen` enum in `app.go` and adding `update*`/`view*` methods.
+
+Tests call `Update`/`View` directly (no `tea.NewProgram`) — the Elm architecture
+makes the whole app testable without a terminal. Follow that pattern.

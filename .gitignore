@@ -1,0 +1,23 @@
+# Build & scratch
+bin/
+*/bin/
+*.exe
+
+# Logs & temp
+*.log
+*.bak
+.env
+.env.*
+
+# Python
+*/.venv/
+*/__pycache__/
+*.pyc
+*/build/
+*/dist/
+*/*.egg-info/
+
+# Editors
+.vscode/
+.idea/
+*.swp

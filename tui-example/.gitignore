@@ -1,0 +1,8 @@
+# Build output (binary named after project)
+/validate
+# Common binary patterns
+/cmd/*/main
+*.exe
+
+# Go toolchain
+vendor/
